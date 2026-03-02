@@ -1,12 +1,12 @@
-# 🎓 Claude Coach
-
 **Master Claude in 7 days. 15–30 minutes per day. Single HTML file, zero dependencies.**
 
-A self-contained, interactive course covering prompt engineering, Projects, web search, Claude Code, Cowork, MCP connectors, and advanced patterns. Includes expandable lessons, hands-on practice, and progress tracking via localStorage.
+A self-contained, interactive course covering prompt engineering, Projects, web search, Claude Code, Cowork, MCP connectors, and advanced patterns. Includes expandable lessons, hands-on practice, and progress tracking via localStorage.  
+
+# 🚀 [Start Learning: Click Here](https://haley-golf.github.io/claude-coach/course.html)  
 
 ---
 
-## 📚 The 7 Days
+### 📚 The 7 Days
 
 | Day | Topic | Focus |
 |-----|-------|-------|
@@ -20,7 +20,7 @@ A self-contained, interactive course covering prompt engineering, Projects, web 
 
 ---
 
-## 💾 Progress Tracking
+### 💾 Progress Tracking
 
 Progress is saved in **localStorage** (your browser's built-in storage):
 
@@ -31,4 +31,4 @@ Progress is saved in **localStorage** (your browser's built-in storage):
 
 ---
 
-## 🚀 [Start Learning](https://haley-golf.github.io/claude-coach/)
+

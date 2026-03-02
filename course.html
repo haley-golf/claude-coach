@@ -1,0 +1,1592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Master Claude — 7-Day Course</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --paper: #f5f0e8;
+    --cream: #ede8dc;
+    --accent: #c8602a;
+    --accent2: #2a6cc8;
+    --green: #2a7a52;
+    --muted: #7a7268;
+    --rule: #d4cec2;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,0.03) 39px, rgba(255,255,255,0.03) 40px);
+  }
+
+  .overline {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+    position: relative;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 900;
+    line-height: 1.02;
+    position: relative;
+    margin-bottom: 1rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+    color: rgba(245,240,232,0.6);
+    max-width: 500px;
+    margin: 0 auto;
+    font-weight: 300;
+    position: relative;
+  }
+
+  /* STICKY NAV */
+  .sticky-nav {
+    background: var(--cream);
+    border-bottom: 1px solid var(--rule);
+    padding: 0.75rem 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 2px;
+    background: var(--rule);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.4s ease;
+  }
+
+  .day-pills {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  .day-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 1.5px solid var(--rule);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+  }
+
+  .day-pill.active { background: var(--accent); border-color: var(--accent); color: white; }
+  .day-pill.done { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+
+  /* MAIN */
+  main {
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 1.5rem 1.5rem 5rem;
+  }
+
+  .day-card { display: none; }
+  .day-card.active { display: block; animation: fadeUp 0.3s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* DAY HEADER */
+  .day-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 2rem 0 1.5rem;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 2rem;
+  }
+
+  .day-numeral {
+    font-family: 'Playfair Display', serif;
+    font-size: 6rem;
+    font-weight: 900;
+    line-height: 0.9;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--ink);
+    flex-shrink: 0;
+  }
+
+  .day-meta { flex: 1; padding-top: 0.5rem; }
+
+  .day-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .day-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 0.4rem;
+  }
+
+  .day-meta-row {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .day-intro {
+    font-size: 1rem;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 2rem;
+    border-left: 3px solid var(--accent);
+    padding-left: 1.25rem;
+  }
+
+  /* SECTION */
+  .section { margin-bottom: 2rem; }
+
+  .section-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 0.4rem;
+    margin-bottom: 1.25rem;
+  }
+
+  /* LESSON */
+  .lesson {
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--white);
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+
+  .lesson-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+    gap: 1rem;
+  }
+
+  .lesson-head:hover { background: var(--cream); }
+
+  .lesson-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .lesson-title {
+    font-size: 0.95rem;
+    font-weight: 500;
+    flex: 1;
+  }
+
+  .lesson-toggle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+
+  .lesson.open .lesson-toggle { transform: rotate(180deg); }
+
+  .lesson-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .lesson.open .lesson-body { display: block; }
+
+  .lesson-body p {
+    font-size: 0.9rem;
+    line-height: 1.75;
+    color: #333;
+    margin-bottom: 0.75rem;
+  }
+
+  .lesson-body p:last-child { margin-bottom: 0; }
+
+  .lesson-body .intro-p { padding-top: 1rem; }
+
+  /* EXAMPLE */
+  .example {
+    background: #f8f8f6;
+    border: 1px solid #e0ddd7;
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    font-size: 0.85rem;
+  }
+
+  .example-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .example-label.bad { color: #b03030; }
+  .example-label.good { color: var(--green); }
+  .example-label.neutral { color: var(--muted); }
+
+  .example p {
+    font-size: 0.85rem !important;
+    font-style: italic;
+    color: #444 !important;
+    margin-bottom: 0 !important;
+    white-space: pre-wrap;
+  }
+
+  .example-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin: 0.75rem 0;
+  }
+
+  @media (max-width: 600px) {
+    .example-pair { grid-template-columns: 1fr; }
+  }
+
+  /* BULLETS */
+  .lesson-body ul {
+    list-style: none;
+    margin: 0.5rem 0 0.75rem;
+  }
+
+  .lesson-body ul li {
+    font-size: 0.875rem;
+    line-height: 1.65;
+    padding: 0.2rem 0 0.2rem 1.25rem;
+    position: relative;
+    color: #333;
+  }
+
+  .lesson-body ul li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.75rem;
+  }
+
+  code {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.82em;
+    background: rgba(0,0,0,0.06);
+    padding: 0.15em 0.4em;
+    border-radius: 3px;
+    word-break: break-word;
+  }
+
+  pre {
+    background: var(--ink);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    margin: 0.75rem 0;
+    overflow-x: auto;
+  }
+
+  pre code {
+    background: transparent;
+    color: #c8d6c0;
+    font-size: 0.8rem;
+    padding: 0;
+  }
+
+  /* CALLOUT BOXES */
+  .callout {
+    border-radius: 4px;
+    padding: 1.1rem 1.35rem;
+    margin-bottom: 1rem;
+  }
+
+  .callout-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+
+  .callout p {
+    font-size: 0.875rem !important;
+    line-height: 1.7;
+    margin-bottom: 0 !important;
+  }
+
+  .callout.tip {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .callout.tip .callout-label { color: var(--accent); }
+  .callout.tip p { color: rgba(245,240,232,0.85) !important; }
+  .callout.tip code { background: rgba(255,255,255,0.12); color: var(--paper); }
+
+  .callout.warning {
+    background: #fff8f0;
+    border: 1px solid #e8c49a;
+  }
+
+  .callout.warning .callout-label { color: #a05010; }
+
+  .callout.resource {
+    background: #f0f5ff;
+    border: 1px solid #c5d5f0;
+  }
+
+  .callout.resource .callout-label { color: var(--accent2); }
+  .callout.resource p { color: #2a3a5a !important; }
+  .callout.resource a { color: var(--accent2); }
+
+  .callout.green {
+    background: #f0f8f4;
+    border: 1px solid #a8d8bc;
+  }
+
+  .callout.green .callout-label { color: var(--green); }
+
+  /* CHECKLIST */
+  .check-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--rule);
+    cursor: pointer;
+  }
+
+  .check-item:last-child { border-bottom: none; }
+
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 1.5px solid var(--rule);
+    border-radius: 2px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+
+  .check-item.checked .checkbox {
+    background: var(--ink);
+    border-color: var(--ink);
+  }
+
+  .check-item.checked .checkbox::after {
+    content: '✓';
+    color: white;
+    font-size: 0.65rem;
+    font-weight: 700;
+  }
+
+  .check-item.checked .check-text {
+    text-decoration: line-through;
+    color: var(--muted);
+  }
+
+  .check-text {
+    font-size: 0.875rem;
+    line-height: 1.55;
+  }
+
+  /* PRACTICE */
+  .practice-box {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .practice-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+
+  .practice-box p {
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .practice-box p:last-child { margin-bottom: 0; }
+
+  .practice-box ul {
+    list-style: none;
+    margin: 0.4rem 0;
+  }
+
+  .practice-box ul li {
+    font-size: 0.875rem;
+    padding: 0.2rem 0 0.2rem 1.25rem;
+    position: relative;
+    color: #333;
+  }
+
+  .practice-box ul li::before {
+    content: '✦';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.55rem;
+    top: 0.4rem;
+  }
+
+  /* NAV */
+  .day-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+
+  .nav-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.65rem 1.35rem;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    cursor: pointer;
+    border-radius: 2px;
+    color: var(--ink);
+    transition: all 0.2s;
+  }
+
+  .nav-btn:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+  .nav-btn.primary { background: var(--accent); border-color: var(--accent); color: white; }
+  .nav-btn.primary:hover:not(:disabled) { background: #a8501f; border-color: #a8501f; }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* LINK STYLE */
+  a { color: var(--accent2); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="overline">7-Day Deep Dive</p>
+  <h1>Master Claude</h1>
+  <p class="subtitle">15–30 minutes a day. Real techniques, real examples, and everything from smart prompting to Claude Code, Projects, Cowork, and beyond.</p>
+</header>
+
+<div class="sticky-nav">
+  <span class="progress-label">Your progress</span>
+  <div class="progress-track">
+    <div class="progress-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div class="day-pills" id="dayPills"></div>
+</div>
+
+<main id="main"></main>
+
+<script>
+const days = [
+
+// ─── DAY 1 ───────────────────────────────────────────────────────────────────
+{
+  num: 1,
+  tag: "Foundations",
+  title: "How Claude Actually Thinks",
+  duration: "~25 min",
+  lessons: 6,
+  intro: "Before you can use any tool well, you need to understand how it works. Claude isn't a search engine, a chatbot, or a magic wand — it's a language model with specific strengths, constraints, and behaviors. Today you'll learn the mental model that makes everything else click.",
+
+  sections: [
+    {
+      label: "Core Mental Model",
+      items: [
+        {
+          title: "The Context Window: Claude's Working Memory",
+          body: `<p class="intro-p">Every conversation with Claude exists inside what's called a <strong>context window</strong> — think of it as a whiteboard. Everything written on that whiteboard (your messages, Claude's replies, any files you shared) is what Claude can "see" when formulating its response. When the conversation ends, the whiteboard is wiped.</p>
+          <p>This has a few important implications:</p>
+          <ul>
+            <li>Claude has no memory between separate conversations (unless you use Projects or the Memory feature)</li>
+            <li>Long conversations are actually helpful — Claude can reference anything said earlier in the same chat</li>
+            <li>Uploading a reference document at the start of a conversation puts it "on the whiteboard" for Claude to use throughout</li>
+            <li>Claude Sonnet 4.6 has a 1 million token context window in beta — that's roughly 750,000 words, or an entire novel</li>
+          </ul>
+          <div class="callout tip"><div class="callout-label">Key Insight</div><p>Don't start a new conversation unless you need to. Staying in one conversation keeps the full context available to Claude and generally produces better, more coherent results than starting fresh each time.</p></div>`
+        },
+        {
+          title: "Claude Is Literal — Especially Now",
+          body: `<p class="intro-p">Claude 4.x models take you at your word. Unlike earlier versions that would helpfully "fill in the gaps," the current Claude does exactly what you say — no more, no less. Anthropic made this change deliberately: it makes Claude more predictable and controllable. But it means you need to be explicit.</p>
+          <div class="example-pair">
+            <div class="example"><div class="example-label bad">❌ Too vague</div><p>"Make this better."</p></div>
+            <div class="example"><div class="example-label good">✓ Explicit</div><p>"Rewrite this paragraph to be more concise. Cut it by at least 40%. Keep the main argument, remove the caveats."</p></div>
+          </div>
+          <p>Anthropic's own docs put it plainly: "Customers who desire the 'above and beyond' behavior might need to more explicitly request these behaviors." If you want comprehensive output, ask for it explicitly.</p>`
+        },
+        {
+          title: "The Anatomy of a Strong Prompt",
+          body: `<p class="intro-p">Research and practice have converged on a reliable prompt structure. Think of it as a short contract between you and Claude:</p>
+          <ul>
+            <li><strong>Role / Context:</strong> Who is Claude in this conversation? What's the situation?</li>
+            <li><strong>Task:</strong> What specifically do you want done? Use active verbs: "write," "analyze," "critique," "list," "compare."</li>
+            <li><strong>Constraints:</strong> What should it include, exclude, length, tone, format?</li>
+            <li><strong>Output format:</strong> How should the result look? Bullet list? Paragraph? JSON? Table?</li>
+            <li><strong>Uncertainty handling:</strong> What should Claude do if it's unsure? "Say so explicitly" is powerful.</li>
+          </ul>
+          <div class="example"><div class="example-label neutral">📋 Template</div><p>You are [role]. [Context sentence].
+
+Task: [What you want]
+Constraints: [List what matters]
+If unsure: Say so explicitly and ask one clarifying question.
+Format: [How to structure the output]</p></div>
+          <p>You don't need every element every time. But whenever results feel off, run through this checklist — you'll almost always find the missing piece.</p>`
+        }
+      ]
+    },
+    {
+      label: "Prompting Techniques",
+      items: [
+        {
+          title: "Positive and Negative Examples: The Most Underused Technique",
+          body: `<p class="intro-p">Showing Claude what you want — and what you don't want — is dramatically more effective than trying to describe it in words. This is called few-shot prompting, and it works because Claude can pattern-match from examples faster than it can interpret abstract instructions.</p>
+          <div class="example"><div class="example-label good">✓ With examples</div><p>"Write a product headline in this style: 'Your inbox, finally under control.' Avoid: 'Revolutionize your productivity with AI-powered email management.' Keep it short, concrete, and benefit-focused."</p></div>
+          <p>The negative example is as important as the positive one. It tells Claude where the boundary is. Without it, Claude is guessing what you mean by "not like this."</p>
+          <div class="callout tip"><div class="callout-label">Pro Move</div><p>Paste 2–3 examples of past work you're proud of and say: "Match this style exactly." Claude will extract the pattern — tone, vocabulary, sentence length, structure — and apply it consistently.</p></div>`
+        },
+        {
+          title: "Give Claude Time to Think: Prompting for Reasoning",
+          body: `<p class="intro-p">For complex or nuanced tasks, asking Claude to reason step-by-step before answering significantly improves output quality. This isn't a trick — it literally changes how the model processes the problem.</p>
+          <p>Several formulations work well:</p>
+          <ul>
+            <li>"Think step by step before answering."</li>
+            <li>"Before responding, list your assumptions."</li>
+            <li>"Consider 3–5 possible approaches, then recommend the best one with your reasoning."</li>
+            <li>"Think through this carefully. What could go wrong with this plan?"</li>
+          </ul>
+          <p>For simple factual questions, this adds unnecessary overhead. Save it for decisions, analysis, plans, and complex writing tasks where nuance matters.</p>
+          <div class="callout warning"><div class="callout-label">When NOT to use this</div><p>Avoid "think step by step" for quick lookups, simple formatting tasks, or short answers. It's most valuable when the task genuinely has multiple valid paths or requires avoiding a common mistake.</p></div>`
+        },
+        {
+          title: "Prompt Chaining: Breaking Complex Tasks Into Stages",
+          body: `<p class="intro-p">Instead of one giant prompt, break big tasks into sequential steps — each stage uses the output of the previous one. This is called prompt chaining, and it produces better results because Claude can focus fully on each sub-task without trying to hold the entire problem in mind at once.</p>
+          <div class="example"><div class="example-label neutral">📋 Example chain for a research report</div><p>Step 1: "List 10 important questions someone must answer before forming a view on [topic]."
+Step 2: "For each question, what are the strongest arguments on each side?"
+Step 3: "Synthesize these into a structured report. Lead with the key tension, then walk through the major considerations."</p></div>
+          <p>Each step is manageable; the final result would have been nearly impossible to get in one shot. This pattern works especially well for: research, writing, planning, debugging, and data analysis.</p>`
+        }
+      ]
+    }
+  ],
+
+  tip: { label: "Today's Core Insight", text: "The difference between a mediocre Claude experience and a great one is almost entirely in how you prompt. Claude is powerful enough for almost anything — but it needs clear, explicit, well-structured instructions. Invest 60 seconds writing a better prompt and you'll save 10 minutes of back-and-forth." },
+
+  practice: {
+    label: "Today's Practice (15 min)",
+    steps: [
+      "Pick one task you'd normally do yourself or Google: a draft email, a decision you're weighing, a concept you want explained.",
+      "Write a prompt using the Role + Task + Constraints + Format structure above. Be explicit.",
+      "Run it. Then try the same task with a vague one-sentence prompt. Compare the results.",
+      "Now add 'Think step by step before answering' and notice what changes."
+    ]
+  },
+
+  resources: [
+    { label: "Anthropic's official prompt engineering guide", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" },
+    { label: "Anthropic's interactive prompt engineering tutorial (GitHub)", url: "https://github.com/anthropics/prompt-eng-interactive-tutorial" },
+    { label: "Claude prompt best practices (Anthropic blog)", url: "https://claude.com/blog/best-practices-for-prompt-engineering" }
+  ],
+
+  checklist: [
+    "Understand the context window and why it matters",
+    "Write one prompt using the full Role + Task + Constraints + Format structure",
+    "Try the step-by-step reasoning technique on a real task",
+    "Compare a vague prompt vs. an explicit one on the same task",
+  ]
+},
+
+// ─── DAY 2 ───────────────────────────────────────────────────────────────────
+{
+  num: 2,
+  tag: "Organization",
+  title: "Projects: Your Persistent Workspaces",
+  duration: "~25 min",
+  lessons: 5,
+  intro: "The single most impactful structural change most people can make to how they use Claude is setting up Projects. Projects solve Claude's biggest limitation — the lack of persistent context — by giving you dedicated workspaces that remember your instructions, your documents, and your context across every conversation.",
+
+  sections: [
+    {
+      label: "Understanding Projects",
+      items: [
+        {
+          title: "What Projects Actually Are",
+          body: `<p class="intro-p">A Project is a dedicated workspace on Claude.ai that:</p>
+          <ul>
+            <li>Has its own standing <strong>Instructions</strong> (a system prompt Claude reads before every conversation in that project)</li>
+            <li>Has a <strong>Knowledge Base</strong> — a place to upload documents that Claude can reference across all chats</li>
+            <li>Maintains <strong>separate chat history</strong> so your work conversations don't bleed into your personal ones</li>
+            <li>On paid plans, uses <strong>RAG (Retrieval Augmented Generation)</strong> to scale up to 10x the normal context for large knowledge bases</li>
+          </ul>
+          <p>Projects are available to all users including free accounts (up to 5 projects). Paid plans get RAG mode, which handles large document collections seamlessly.</p>
+          <div class="callout tip"><div class="callout-label">Critical Detail</div><p>Context is NOT shared across chats within a project. Each conversation starts fresh — but with your instructions and knowledge base loaded. If you want something to persist from one chat to the next, it must be in the knowledge base or instructions, not just said in a prior conversation.</p></div>`
+        },
+        {
+          title: "How to Set Up a Project (Step by Step)",
+          body: `<p class="intro-p">Navigate to <strong>claude.ai/projects</strong> and click <strong>+ New Project</strong>. Here's what to configure:</p>
+          <ul>
+            <li><strong>Name:</strong> Claude does NOT see this — it's just for you. Keep it descriptive.</li>
+            <li><strong>Instructions:</strong> This IS what Claude sees. Write it like a briefing document (see next lesson).</li>
+            <li><strong>Knowledge Base:</strong> Click the "+" to upload files — PDFs, text, code, CSVs. Claude can reference these in every chat.</li>
+            <li><strong>Visibility (Team/Enterprise):</strong> Keep private, share with specific members, or share organization-wide.</li>
+          </ul>
+          <p>One key efficiency insight from Anthropic's docs: <em>documents uploaded to a project are cached</em>. Every time you reference that content, only new uncached portions count against your usage. This means you can ask dozens of questions about the same set of documents without it feeling expensive.</p>`
+        },
+        {
+          title: "Writing Powerful Project Instructions",
+          body: `<p class="intro-p">This is where most people undersell themselves. Weak instructions: "Help me with my work." Strong instructions treat Claude like a first-day hire who needs a proper briefing.</p>
+          <p>Great Project Instructions include:</p>
+          <ul>
+            <li>Who you are and what you're working on ("I'm a product manager at a B2B SaaS startup focused on team collaboration software")</li>
+            <li>Claude's role in this project ("Your job is to help me with competitive research, product specs, and stakeholder communications")</li>
+            <li>Formatting and tone preferences ("Always be direct and concise. No bullet-point dumps — use prose with clear structure")</li>
+            <li>Key facts and terminology ("Our main competitor is Notion. We call our core product 'Workspaces' not 'Projects'")</li>
+            <li>What Claude should do when uncertain ("If you're not sure what I mean, ask one clarifying question rather than guessing")</li>
+            <li>What to avoid ("Never suggest we add AI features — this is a conscious product decision")</li>
+          </ul>
+          <div class="example"><div class="example-label neutral">📋 Starter template</div><p>I am a [role] at [company/context]. I'm using this project for [purpose].
+
+Your role: [what Claude should do here]
+Tone: [direct/formal/casual], [detailed/concise]
+Always: [key behaviors]
+Never: [things to avoid]
+Key context: [facts, terminology, constraints that always apply]
+When uncertain: Ask one clarifying question rather than guessing.</p></div>`
+        }
+      ]
+    },
+    {
+      label: "Advanced Project Use",
+      items: [
+        {
+          title: "Project Architecture: How to Organize Your Work Life",
+          body: `<p class="intro-p">Don't create one massive "Everything" project. Think of Projects as contexts — environments that shape how Claude thinks when you're working on that domain.</p>
+          <p>Good project structures:</p>
+          <ul>
+            <li><strong>By role:</strong> "Day Job," "Side Project," "Personal Finance," "Learning"</li>
+            <li><strong>By project:</strong> One project per major initiative you work on for months</li>
+            <li><strong>By use case:</strong> "Writing & Editing," "Research," "Code Review," "Meeting Prep"</li>
+          </ul>
+          <p>From Anthropic's official examples: good project types include research projects with uploaded papers and datasets, product development with specs and design decisions, and home renovation projects with budget trackers and communication logs.</p>
+          <div class="callout resource"><div class="callout-label">Official Resource</div><p>Anthropic has a guide: <a href="https://support.claude.com/en/articles/9529781-examples-of-projects-you-can-create" target="_blank">Examples of Projects You Can Create</a> — good for inspiration.</p></div>`
+        },
+        {
+          title: "The Knowledge Base: What to Upload and How",
+          body: `<p class="intro-p">The knowledge base is what transforms a Project from "Claude with a standing prompt" into a genuine working assistant that knows your world.</p>
+          <p>What works well to upload:</p>
+          <ul>
+            <li>Style guides and brand guidelines (Claude will actually follow them)</li>
+            <li>Technical documentation or specs (reference without copy-pasting)</li>
+            <li>Research papers, reports, or articles you'll refer back to</li>
+            <li>Your company's product info, pricing, or FAQs</li>
+            <li>Templates you use regularly</li>
+            <li>Meeting notes or decision logs for a project</li>
+          </ul>
+          <p>Claude can now also work directly with files in the knowledge base through its computing environment — not just read them, but reference them in code, analysis, and workflows. This was a significant recent upgrade.</p>
+          <div class="callout warning"><div class="callout-label">Size Note</div><p>Maximum file size is 30MB per upload. For PDFs larger than 30MB, Claude can still process them through its computing environment separately.</p></div>`
+        }
+      ]
+    }
+  ],
+
+  tip: { label: "Efficiency Multiplier", text: "Treat your Project Instructions like you'd treat a new employee onboarding doc. Write it once thoughtfully, then refine it when Claude does something you didn't want or asks something the instructions should have answered. Good instructions compound — the investment pays off across every future conversation." },
+
+  practice: {
+    label: "Today's Practice (20 min)",
+    steps: [
+      "Create one Project for a real context in your life: work, a side project, research, or even personal finance.",
+      "Write at least 8–10 lines of Instructions using the template above. Be specific — include terminology, constraints, and your preferred tone.",
+      "Upload at least one document to the knowledge base (a PDF, a doc, anything relevant).",
+      "Have a real conversation inside the Project. Notice how it feels different from a blank chat.",
+      "After the conversation, review your instructions: what should you add or clarify?"
+    ]
+  },
+
+  resources: [
+    { label: "What are Projects? (Official support article)", url: "https://support.claude.com/en/articles/9517075-what-are-projects" },
+    { label: "How to create and manage projects", url: "https://support.claude.com/en/articles/9519177-how-can-i-create-and-manage-projects" },
+    { label: "Claude's personalization features explained", url: "https://support.claude.com/en/articles/10185728-understanding-claude-s-personalization-features" }
+  ],
+
+  checklist: [
+    "Create at least one Project with custom Instructions",
+    "Upload a document to the knowledge base",
+    "Have a real conversation inside the Project",
+    "Review and refine instructions after the conversation"
+  ]
+},
+
+// ─── DAY 3 ───────────────────────────────────────────────────────────────────
+{
+  num: 3,
+  tag: "Interface",
+  title: "Claude.ai: Features Deep Dive",
+  duration: "~25 min",
+  lessons: 6,
+  intro: "Claude.ai has significantly more built-in capability than most people realize. Today we'll go deep on the features that most users overlook — from Artifacts to file creation, memory, styles, and Skills. Each of these, used well, is a meaningful force multiplier.",
+
+  sections: [
+    {
+      label: "Core Interface Features",
+      items: [
+        {
+          title: "Artifacts: Claude's Separate Scratchpad",
+          body: `<p class="intro-p">Artifacts are a separate rendering panel that appears when Claude generates substantial standalone content — documents, code, diagrams, HTML, etc. Instead of appearing in the chat scroll, Artifacts stay pinned on the right side so you can iterate on them without losing context.</p>
+          <p>How to use them well:</p>
+          <ul>
+            <li>Explicitly ask: "Put this in an artifact" for any content you'll want to refine, copy, or download</li>
+            <li>Ask Claude to "update the artifact" with specific changes — it edits in place rather than regenerating from scratch</li>
+            <li>Artifacts support markdown, HTML, React components, SVG, Mermaid diagrams, and more</li>
+            <li>You can download artifacts or copy them cleanly without chat noise around them</li>
+          </ul>
+          <div class="callout tip"><div class="callout-label">Best Use Cases</div><p>Artifacts shine for: documents you'll edit iteratively, code you want to run or copy cleanly, structured reports, diagrams, and anything where you want a clean final output separate from the discussion.</p></div>`
+        },
+        {
+          title: "File Creation: Real Files, Not Just Text",
+          body: `<p class="intro-p">Claude can now create actual downloadable files — Excel spreadsheets, Word documents, PowerPoint presentations, and PDFs — directly in the chat. This is a major capability that many users don't know exists.</p>
+          <p>What you can create:</p>
+          <ul>
+            <li><strong>Excel (.xlsx):</strong> With working formulas, calculations, charts, and formatting. Try: "Create a monthly budget tracker with income, expense categories, and automatic savings calculations."</li>
+            <li><strong>Word (.docx):</strong> Formatted documents, reports, letters with proper headings and structure</li>
+            <li><strong>PowerPoint (.pptx):</strong> Full slide decks with layouts, content, and speaker notes</li>
+            <li><strong>PDF:</strong> Clean, formatted documents ready to share</li>
+          </ul>
+          <p>You can download these files directly or save them to Google Drive. The max file size is 30MB. To enable this feature: Settings → Capabilities → Code execution and file creation.</p>
+          <div class="callout warning"><div class="callout-label">Security Note</div><p>When using file creation, be aware that this feature runs in a sandboxed computing environment. Anthropic recommends monitoring Claude while using it and stopping it if you see unexpected behavior.</p></div>`
+        },
+        {
+          title: "Uploading and Analyzing Files",
+          body: `<p class="intro-p">You can upload files to any Claude conversation for analysis, not just to Projects. Supported types and good use cases:</p>
+          <ul>
+            <li><strong>PDFs:</strong> Research papers, contracts, reports, manuals. Ask Claude to summarize, extract specific data, compare to another document, or draft a response based on the content.</li>
+            <li><strong>Images:</strong> Screenshots, diagrams, whiteboard photos, product mockups. Claude can describe, analyze, compare, or explain what it sees.</li>
+            <li><strong>CSVs and data files:</strong> Upload data and ask for analysis, patterns, summaries, or visualization suggestions. Claude can also write code to process the data.</li>
+            <li><strong>Code files:</strong> Upload source files for review, debugging, refactoring, or explanation.</li>
+          </ul>
+          <p>The key to getting good results: be specific about what you want. "Analyze this PDF" is weak. "Extract all action items from this meeting transcript, grouped by owner, in a table" is strong.</p>`
+        }
+      ]
+    },
+    {
+      label: "Personalization & Memory",
+      items: [
+        {
+          title: "Memory: Claude's Cross-Conversation Knowledge",
+          body: `<p class="intro-p">Claude.ai can generate and store memories from your conversations — facts about you, your preferences, your context — that persist across all future chats (outside of Projects and Incognito mode). This is separate from Projects and works globally.</p>
+          <p>How to work with your memory:</p>
+          <ul>
+            <li>Go to <strong>Settings → Memory</strong> to view all stored memories</li>
+            <li>Edit or delete any memory that's wrong, outdated, or that you'd rather not have</li>
+            <li>Say "Remember that I..." to explicitly add something to memory</li>
+            <li>Say "Forget that I..." to remove something</li>
+            <li>Use Incognito mode if you want a conversation with zero memory interaction</li>
+          </ul>
+          <p>Memory and Projects work as complements: memory is global background context ("I'm a software engineer who prefers concise answers"), while Projects are contextual instructions for specific work ("When in this project, focus on security implications").</p>`
+        },
+        {
+          title: "Styles: Customize How Claude Communicates",
+          body: `<p class="intro-p">Styles let you define exactly how Claude formats and delivers its responses — not just what it says, but how it sounds. You can create custom styles based on your own writing samples.</p>
+          <p>Where to find this: <strong>Customize → Styles</strong> in your account. You can:</p>
+          <ul>
+            <li>Choose from presets (concise, explanatory, formal, casual)</li>
+            <li>Create a custom style by pasting your own writing — Claude will match your voice</li>
+            <li>Switch styles mid-conversation by mentioning it: "Use my concise style for this"</li>
+          </ul>
+          <p>The style customization feature is particularly powerful for writers and communicators — paste in 3–5 emails or documents you've written and Claude will learn your voice, vocabulary, and sentence structure. Unlike instructions in a Project, Styles are applied globally to all conversations.</p>`
+        },
+        {
+          title: "Skills: Extending Claude's Native Capabilities",
+          body: `<p class="intro-p">Skills are instruction sets that teach Claude specialized workflows. Anthropic provides built-in Skills, and there's a growing directory of partner-built Skills. You can also upload your own custom Skills.</p>
+          <p>To enable Skills: <strong>Customize → Skills</strong></p>
+          <ul>
+            <li><strong>Built-in Skills:</strong> Enhanced Excel creation, PowerPoint, Word, PDF workflows — using these produces dramatically better file outputs than asking Claude without them</li>
+            <li><strong>Partner Skills:</strong> From Notion, Figma, Atlassian, and others — these integrate with those platforms' MCP connectors</li>
+            <li><strong>Custom Skills:</strong> Upload your own SKILL.md files to teach Claude your team's specific workflows</li>
+          </ul>
+          <p>The Skills directory is at <a href="https://claude.com/connectors" target="_blank">claude.com/connectors</a>.</p>
+          <div class="callout resource"><div class="callout-label">Official Docs</div><p>See the full guide: <a href="https://support.claude.com/en/articles/12512180-use-skills-in-claude" target="_blank">Use Skills in Claude</a></p></div>`
+        }
+      ]
+    }
+  ],
+
+  tip: { label: "Usage Efficiency Tip", text: "Group related questions into a single message rather than sending them one at a time. It's faster, uses fewer messages, and gives Claude the full picture so it can give you a more coherent response. This is especially important if you're on a plan with usage limits." },
+
+  practice: {
+    label: "Today's Practice (20 min)",
+    steps: [
+      "Upload a PDF (any report, paper, or contract) and ask 3 specific questions: a summary focused on action items, extraction of a specific type of data, and a critical analysis or risk assessment.",
+      "Ask Claude to create a real file — try a spreadsheet, document, or presentation relevant to your work.",
+      "Check Settings → Memory and review what Claude remembers about you. Edit anything outdated or incorrect.",
+      "Enable at least one Skill from Customize → Skills (the built-in Excel or document ones are great to start with)."
+    ]
+  },
+
+  resources: [
+    { label: "Create and edit files with Claude (official guide)", url: "https://support.claude.com/en/articles/12111783-create-and-edit-files-with-claude" },
+    { label: "Use Skills in Claude", url: "https://support.claude.com/en/articles/12512180-use-skills-in-claude" },
+    { label: "Usage limit best practices", url: "https://support.claude.com/en/articles/9797557-usage-limit-best-practices" }
+  ],
+
+  checklist: [
+    "Try Artifacts on a document or code task",
+    "Ask Claude to create a real downloadable file",
+    "Upload and query a PDF with specific, targeted questions",
+    "Review and update your Memory settings",
+    "Enable at least one Skill"
+  ]
+},
+
+// ─── DAY 4 ───────────────────────────────────────────────────────────────────
+{
+  num: 4,
+  tag: "Research & Thinking",
+  title: "Web Search, Research & Deep Work",
+  duration: "~25 min",
+  lessons: 5,
+  intro: "Claude's web search and research capabilities have gotten genuinely powerful. Today we'll cover not just how to use them, but how to combine them with advanced prompting patterns to get the kind of rigorous, synthesized output that normally takes hours of manual research.",
+
+  sections: [
+    {
+      label: "Web Search & Research",
+      items: [
+        {
+          title: "Web Search: How It Works and When to Use It",
+          body: `<p class="intro-p">When web search is enabled (click the + icon in the chat bar and toggle it on), Claude can pull current information from the web in real time. It does this automatically when it detects the question needs fresh data, or you can explicitly say "search the web for..."</p>
+          <p>When web search matters:</p>
+          <ul>
+            <li>Anything time-sensitive: news, stock prices, election results, recent releases</li>
+            <li>Current holders of positions: "Who is the current CEO of X?" or "Who won the 2025 election?"</li>
+            <li>Fast-moving topics where Claude's training data might be stale</li>
+            <li>Fact-checking claims that could have changed</li>
+          </ul>
+          <p>Web search is less necessary for: timeless concepts, historical facts, definitions, coding help, and anything Claude can already answer reliably from training.</p>
+          <div class="callout tip"><div class="callout-label">Power Pattern</div><p>After a web search, ask Claude to fetch the full page of the most relevant result: "Now fetch and read the full article at [URL] and give me the key points." Search snippets are often too brief — full-page reading produces much richer synthesis.</p></div>`
+        },
+        {
+          title: "Deep Research: Multi-Step Autonomous Research",
+          body: `<p class="intro-p">The Deep Research feature (available on paid plans) is qualitatively different from a single web search. It runs multiple autonomous search queries, reads full pages, synthesizes across sources, and produces a structured report — often in 5–10 minutes for work that would take hours manually.</p>
+          <p>How to get the best results from Deep Research:</p>
+          <ul>
+            <li><strong>Frame it as a question, not a topic:</strong> "What are the main risks of X for a company in Y situation?" beats "research X."</li>
+            <li><strong>Specify focus areas:</strong> "Focus on: recent developments (last 12 months), key players, and open questions."</li>
+            <li><strong>Set the output format:</strong> "Structure the output as: executive summary, key findings, open questions, sources."</li>
+            <li><strong>Add constraints:</strong> "Prioritize academic and primary sources over news articles."</li>
+          </ul>
+          <p>Deep Research is ideal for: market research, competitive analysis, due diligence, learning a new technical domain, policy research, and pre-meeting prep on complex topics.</p>`
+        }
+      ]
+    },
+    {
+      label: "Advanced Reasoning Patterns",
+      items: [
+        {
+          title: "The Structured Analysis Pattern",
+          body: `<p class="intro-p">For complex decisions or questions, the single most effective prompt pattern is to ask Claude to structure its analysis before giving you an answer. This mirrors how good consultants and analysts actually work.</p>
+          <div class="example"><div class="example-label neutral">📋 The Scoring Pattern</div><p>"I'm deciding between [Option A] and [Option B]. 
+
+Please:
+1. List the 5 most important criteria for this decision
+2. Score each option against each criterion (1-10) with one sentence of reasoning
+3. Identify the single most important tradeoff
+4. Give your recommendation with the core argument in 2-3 sentences"</p></div>
+          <p>This works because it forces Claude to make its reasoning explicit and structured — which means you can agree or disagree with specific steps rather than just accepting or rejecting the conclusion.</p>`
+        },
+        {
+          title: "Multi-Step Document Work",
+          body: `<p class="intro-p">Claude handles long documents well — but the prompts for long-form work are different from short queries. Effective patterns:</p>
+          <ul>
+            <li><strong>Staged generation:</strong> "We're doing this in steps. First, just create the outline. Don't write the content yet." Then approve, then write section by section.</li>
+            <li><strong>Iterative refinement:</strong> "Here's a draft. First, identify 3 structural weaknesses. Then suggest rewrites for each." Keep the whole conversation in one thread.</li>
+            <li><strong>Devil's advocate:</strong> "You just helped me write this argument. Now steelman the opposite position as strongly as you can."</li>
+            <li><strong>The editor role:</strong> "You're a direct editor. Your only job is to cut. Remove 30% of the words from this without losing the main argument. Show me what you removed and why."</li>
+          </ul>`
+        },
+        {
+          title: "Avoiding Context Degradation in Long Conversations",
+          body: `<p class="intro-p">Very long conversations can degrade in quality — Claude may start to lose track of earlier instructions, contradict itself, or drift. This is called "context rot." Signs to watch for:</p>
+          <ul>
+            <li>Claude asks questions the instructions already answer</li>
+            <li>It forgets constraints you set earlier in the conversation</li>
+            <li>Responses become inconsistent with earlier decisions</li>
+          </ul>
+          <p>Fixes:</p>
+          <ul>
+            <li><strong>Use Projects</strong> with standing instructions — you can start a fresh conversation without losing your setup</li>
+            <li><strong>Re-anchor mid-conversation:</strong> "Reminder: we agreed on X approach. With that in mind..." before complex next steps</li>
+            <li><strong>Summarize and restart:</strong> Ask Claude to summarize all decisions made so far, then paste that summary into a new conversation</li>
+          </ul>
+          <div class="callout tip"><div class="callout-label">Context Engineering Insight</div><p>Anthropic's internal guidance on context engineering: "Claude is already smart enough — intelligence is not the bottleneck, context is." The quality of what you get out is almost entirely determined by what you put in at each step.</p></div>`
+        }
+      ]
+    }
+  ],
+
+  tip: { label: "Research Power Move", text: "When starting research on a new domain, ask Claude: 'What are the 10 most important questions someone needs to answer before forming an informed view on [topic]?' Then work through that list. You'll cover the domain far faster than by reading randomly, because Claude has essentially given you the research agenda that experts use." },
+
+  practice: {
+    label: "Today's Practice (20–25 min)",
+    steps: [
+      "Enable web search and ask something genuinely time-sensitive — a recent news event, who currently holds a role, or the latest version of a technology.",
+      "Try the Scoring Pattern on a real decision you're facing: frame it with 5 criteria, score both options, get a recommendation.",
+      "Take a complex topic you need to learn about for work. Ask Claude for the '10 most important questions' framework, then work through 2–3 of them.",
+      "If you have a long draft of any kind, try the devil's advocate pattern — ask Claude to steelman the strongest objections to your argument."
+    ]
+  },
+
+  resources: [
+    { label: "Effective context engineering for AI agents (Anthropic blog)", url: "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" }
+  ],
+
+  checklist: [
+    "Run a live web search on something time-sensitive",
+    "Try the Scoring Pattern on a real decision",
+    "Use the '10 most important questions' research framework",
+    "Practice the devil's advocate or editor role on a piece of your writing"
+  ]
+},
+
+// ─── DAY 5 ───────────────────────────────────────────────────────────────────
+{
+  num: 5,
+  tag: "Developer Tools",
+  title: "Claude Code: AI in Your Terminal",
+  duration: "~30 min",
+  lessons: 6,
+  intro: "Claude Code is a command-line AI coding assistant that works directly in your terminal — reading your actual files, running commands, editing code across multiple files, and operating autonomously on complex tasks. It's a different class of tool from the web interface. Today is a proper introduction.",
+
+  sections: [
+    {
+      label: "Getting Started",
+      items: [
+        {
+          title: "Installation and What You Get",
+          body: `<p class="intro-p">Claude Code installs via npm and runs in your terminal. It hooks directly into your filesystem and development environment.</p>
+          <pre><code>npm install -g @anthropic-ai/claude-code
+# then run in any project directory:
+claude</code></pre>
+          <p>What you get:</p>
+          <ul>
+            <li>Claude can read any file in your project — it understands your full codebase, not just what you paste</li>
+            <li>It can write and edit files directly (with your permission)</li>
+            <li>It can run terminal commands (build, test, lint, etc.)</li>
+            <li>It can search across files, understand dependencies, and trace code paths</li>
+            <li>It can commit to git, create branches, and open PRs</li>
+          </ul>
+          <p>There's also a VS Code extension that lets you launch Claude Code from inside your IDE. Claude Code works with any language and any tech stack.</p>
+          <div class="callout resource"><div class="callout-label">Official Docs</div><p><a href="https://docs.claude.com/en/docs/claude-code/overview" target="_blank">Claude Code Overview — docs.claude.com</a></p></div>`
+        },
+        {
+          title: "The CLAUDE.md File: Your Codebase Briefing",
+          body: `<p class="intro-p">The most important setup step for Claude Code is creating a <code>CLAUDE.md</code> file in your project root. This file is automatically loaded at the start of every Claude Code session — it's how you give Claude persistent knowledge about your project without repeating yourself every time.</p>
+          <p>What to include in CLAUDE.md (think: WHAT, WHY, HOW):</p>
+          <ul>
+            <li><strong>WHAT:</strong> Tech stack, architecture, folder structure, key files. "This is a Next.js 15 app with PostgreSQL. /app has the routes, /lib has shared utilities."</li>
+            <li><strong>WHY:</strong> Purpose of the project, what each major module does</li>
+            <li><strong>HOW:</strong> Build commands, test commands, coding conventions. "Run <code>npm run test:unit</code> not the full suite. Use ES modules, not CommonJS."</li>
+          </ul>
+          <pre><code># Project: [Name]
+[One sentence about what this does]
+
+## Stack
+- Framework: Next.js 15 / React 19
+- Database: PostgreSQL + Prisma
+- Auth: NextAuth.js
+
+## Commands
+- Dev: npm run dev
+- Test: npm run test:unit (NOT npm test)
+- Type check: npx tsc --noEmit
+
+## Code Style
+- Use ES modules (import/export), not require()
+- Functional components with hooks only
+- State: Zustand (see src/stores/)
+
+## What Claude Gets Wrong
+- Never use --legacy-peer-deps
+- The /api/v2 routes are deprecated, use /api/v3</code></pre>
+          <div class="callout warning"><div class="callout-label">Keep it concise</div><p>Frontier models can reliably follow ~150–200 instructions. Claude Code's own system prompt takes up ~50 of those slots. That leaves ~100–150 for you. Don't dump your entire wiki into CLAUDE.md — it'll start ignoring instructions. Document what Claude gets wrong, not everything you know.</p></div>`
+        }
+      ]
+    },
+    {
+      label: "Core Workflows",
+      items: [
+        {
+          title: "Plan Mode: The Most Important Habit",
+          body: `<p class="intro-p">Before any complex task, activate Plan Mode by pressing <strong>Shift+Tab twice</strong>. In Plan Mode, Claude can read and analyze files but cannot make any changes. It's "architect mode."</p>
+          <p>Why this matters:</p>
+          <ul>
+            <li>It forces Claude to lay out its full approach before touching anything</li>
+            <li>You can review and course-correct before any code changes happen</li>
+            <li>It catches misunderstandings early, before Claude has gone 10 files deep in the wrong direction</li>
+            <li>It produces consistently formatted, organized plans</li>
+          </ul>
+          <div class="example"><div class="example-label neutral">📋 Workflow for any complex task</div><p>1. Activate Plan Mode (Shift+Tab twice)
+2. Describe the task: "Add pagination to the users list endpoint, following the existing pattern in posts.ts"
+3. Read Claude's plan carefully
+4. Ask questions or request changes to the plan
+5. Exit Plan Mode and approve implementation
+6. Review the changes before accepting</p></div>
+          <p>This single habit — planning before implementation — is cited by almost every serious Claude Code practitioner as the highest-leverage change they made.</p>`
+        },
+        {
+          title: "High-Leverage Claude Code Use Cases",
+          body: `<p class="intro-p">Where Claude Code adds the most value:</p>
+          <ul>
+            <li><strong>Codebase exploration:</strong> "Explain how authentication works in this codebase, from login request to session token." Claude reads across files to give you a coherent picture.</li>
+            <li><strong>Bug investigation:</strong> "There's a race condition in the order processing flow. Find the root cause." Claude traces through the code systematically.</li>
+            <li><strong>Feature implementation:</strong> "Add rate limiting to all API routes following the pattern in /middleware/rateLimit.ts." Claude finds, understands, and extends the existing pattern.</li>
+            <li><strong>Refactoring:</strong> "Extract all hardcoded strings into a constants file. Update all references." Multi-file edit that would take hours manually.</li>
+            <li><strong>Test writing:</strong> "Write unit tests for all untested functions in /services. Follow the existing test patterns in /tests/unit."</li>
+            <li><strong>Code review:</strong> "Review this PR for security issues, performance problems, and anything that doesn't match our coding standards."</li>
+          </ul>`
+        },
+        {
+          title: "Context Management and the /clear Command",
+          body: `<p class="intro-p">Just like in claude.ai, Claude Code's context fills up over a session and can degrade. Key management practices:</p>
+          <ul>
+            <li><strong>One task per session:</strong> Start a new Claude Code session for each distinct task or feature. Don't carry a session from a bug fix into a feature implementation.</li>
+            <li><strong>Use /clear</strong> to reset the conversation when switching tasks within a session. This preserves your CLAUDE.md but clears the conversation history.</li>
+            <li><strong>Use /compact</strong> if you're running low on context mid-task. This compresses the conversation history with specific instructions on what to preserve.</li>
+            <li><strong>Create a plan.md:</strong> For long projects, have Claude write its plan and decisions to an external file. This persists beyond any session.</li>
+          </ul>
+          <div class="callout tip"><div class="callout-label">Git as Safety Net</div><p>Always have Claude work on a new branch. Run: "Before starting, create a new branch for this task." If Claude goes wrong, you discard the branch. Never let Claude work directly on main. This simple habit removes 90% of the anxiety from autonomous AI coding.</p></div>`
+        },
+        {
+          title: "Hooks and Slash Commands: Automation Infrastructure",
+          body: `<p class="intro-p">Once you're comfortable with Claude Code basics, hooks and custom slash commands let you build repeatable automated workflows.</p>
+          <p><strong>Hooks</strong> run scripts automatically at specific points — unlike CLAUDE.md which is advisory, hooks are guaranteed to execute. Ask Claude to write hooks for you: "Write a hook that runs Prettier after every file edit" or "Write a hook that blocks writes to the migrations folder."</p>
+          <p><strong>Custom Slash Commands</strong> let you define reusable workflows. Create a directory at <code>.claude/commands/</code>, add a markdown file for each command (e.g., <code>review.md</code>), and run it with <code>/review</code>. These are written in natural language. Use <code>$ARGUMENTS</code> for dynamic inputs.</p>
+          <pre><code># .claude/commands/review.md
+Review the following file for: security issues, performance 
+problems, and deviations from our coding standards in CLAUDE.md.
+Provide specific line references.
+File: $ARGUMENTS</code></pre>
+          <p>Then run: <code>/review src/api/users.ts</code></p>`
+        }
+      ]
+    }
+  ],
+
+  tip: { label: "Claude Code in One Sentence", text: "Think of Claude Code as a junior developer who is extremely fast, needs good direction, and must plan before coding. Your job is to be a good tech lead: clear requirements, review the plan, let them work, review the output. The better you direct, the faster and better they build." },
+
+  practice: {
+    label: "Today's Practice (25–30 min)",
+    steps: [
+      "Install Claude Code: npm install -g @anthropic-ai/claude-code",
+      "Open it in a real project directory and run /init to generate a starter CLAUDE.md. Refine the generated file.",
+      "Activate Plan Mode (Shift+Tab twice) and ask Claude to explain the architecture of your codebase.",
+      "Give Claude one real task — something small and bounded — using the Plan → Approve → Implement workflow.",
+      "After the task, try /clear and start a second task to practice session management."
+    ]
+  },
+
+  resources: [
+    { label: "Claude Code official documentation", url: "https://docs.claude.com/en/docs/claude-code/overview" },
+    { label: "Claude Code best practices (official)", url: "https://code.claude.com/docs/en/best-practices" },
+    { label: "Writing a good CLAUDE.md (community guide)", url: "https://www.humanlayer.dev/blog/writing-a-good-claude-md" },
+    { label: "Complete Claude Code tutorial", url: "https://www.siddharthbharath.com/claude-code-the-complete-guide/" }
+  ],
+
+  checklist: [
+    "Install Claude Code and run /init in a project",
+    "Create or refine a CLAUDE.md file with WHAT/WHY/HOW",
+    "Use Plan Mode (Shift+Tab twice) before a real task",
+    "Complete one task with the Plan → Review → Implement workflow",
+    "Practice /clear between tasks"
+  ]
+},
+
+// ─── DAY 6 ───────────────────────────────────────────────────────────────────
+{
+  num: 6,
+  tag: "Ecosystem",
+  title: "Cowork, Desktop & the Full Stack",
+  duration: "~25 min",
+  lessons: 5,
+  intro: "Claude isn't just a chat interface — it's an ecosystem of tools designed to integrate with your actual work environment. Today we'll map the full landscape: Cowork for file automation, beta integrations for Chrome and Office apps, and MCP for connecting Claude to any system.",
+
+  sections: [
+    {
+      label: "The Broader Ecosystem",
+      items: [
+        {
+          title: "Cowork: Automation for Non-Developers",
+          body: `<p class="intro-p">Cowork is a desktop application that lets you automate file and task workflows using Claude — without writing any code. Think of it as Claude Code for everyday knowledge work, not just programming.</p>
+          <p>What you can do with Cowork:</p>
+          <ul>
+            <li>Automate repetitive file management tasks (rename, sort, convert, extract)</li>
+            <li>Set up <strong>scheduled recurring tasks</strong> — e.g., "every Monday, summarize all PDF reports added this week and create a digest"</li>
+            <li>Build workflows that trigger on events (new file in folder, etc.)</li>
+            <li>Access Claude's full capabilities for desktop automation, no code required</li>
+          </ul>
+          <p>Cowork has a Customize section that groups skills, plugins, and connectors in one place. This was added in a recent release along with scheduling features.</p>
+          <div class="callout resource"><div class="callout-label">Who is Cowork for?</div><p>Cowork is explicitly designed for non-developers who want the power of AI automation without needing to use a terminal. If you're a developer, Claude Code is generally the better tool for complex workflows. For business users, Cowork is the entry point.</p></div>`
+        },
+        {
+          title: "Claude in Chrome: Browsing as an Agent",
+          body: `<p class="intro-p">Claude in Chrome is a beta feature that turns Claude into a browsing agent — it can navigate websites, fill out forms, extract data, and interact with web apps on your behalf, all in your actual Chrome browser.</p>
+          <p>Capabilities:</p>
+          <ul>
+            <li>Contextual prompt suggestions based on the current website you're on</li>
+            <li>Navigate and interact with web pages autonomously</li>
+            <li>Extract and summarize information from sites you're visiting</li>
+            <li>Assist with form filling and data entry workflows</li>
+          </ul>
+          <p>Claude in Chrome is available in beta to all paid plan subscribers (Pro, Team, Enterprise). You can find it at the Claude.ai app or browser extension.</p>
+          <div class="callout warning"><div class="callout-label">Privacy Note</div><p>Claude in Chrome has access to your browser activity during use. Review what you're comfortable sharing before using it for sensitive browsing sessions.</p></div>`
+        },
+        {
+          title: "Claude in Excel and PowerPoint",
+          body: `<p class="intro-p">Anthropic has built direct integrations into Microsoft Office applications. These bring Claude's capabilities into tools you're already spending time in.</p>
+          <p><strong>Claude in Excel:</strong></p>
+          <ul>
+            <li>Ask questions about your spreadsheet data in natural language</li>
+            <li>Generate and explain complex formulas</li>
+            <li>Analyze trends and surface patterns in your data</li>
+            <li>Create charts and visualizations from descriptions</li>
+          </ul>
+          <p><strong>Claude in PowerPoint:</strong></p>
+          <ul>
+            <li>Generate slides from an outline or description</li>
+            <li>Improve existing slides: tighten language, improve structure</li>
+            <li>Get suggestions on narrative flow and presentation logic</li>
+          </ul>
+          <p>These integrations are in beta. Check <a href="https://support.claude.com" target="_blank">support.claude.com</a> for current availability and setup instructions, as this is evolving quickly.</p>`
+        }
+      ]
+    },
+    {
+      label: "MCP & Connectors",
+      items: [
+        {
+          title: "MCP: How Claude Connects to External Systems",
+          body: `<p class="intro-p">Model Context Protocol (MCP) is the open standard that allows Claude to connect to external tools, APIs, and services. This is the plumbing that makes integrations like Google Drive, Asana, Gmail, and others work in Claude.ai.</p>
+          <p>How MCP works in practice:</p>
+          <ul>
+            <li>MCP servers expose tools that Claude can call (read email, create a task, fetch a document)</li>
+            <li>You connect services through <strong>Settings → Integrations</strong> on Claude.ai</li>
+            <li>Once connected, Claude can use those tools autonomously in conversation ("Find my notes from last week's meeting in Drive")</li>
+            <li>You can also enable MCP servers in Claude Code via your config file</li>
+          </ul>
+          <p>The connector directory is at <a href="https://claude.com/connectors" target="_blank">claude.com/connectors</a>. Available connectors include Google Drive, Gmail, Google Calendar, Asana, Notion, Jira, GitHub, Slack, and many more.</p>`
+        },
+        {
+          title: "How the Ecosystem Fits Together",
+          body: `<p class="intro-p">The full Claude ecosystem is best understood as layers that complement each other:</p>
+          <ul>
+            <li><strong>Claude.ai (web/mobile):</strong> Your thinking partner. Research, writing, analysis, document work, file creation. The command center for knowledge work.</li>
+            <li><strong>Claude Code (terminal):</strong> Your coding partner. Files, builds, tests, git, multi-file autonomous tasks. For developers.</li>
+            <li><strong>Cowork (desktop app):</strong> File and task automation without code. For everyone, especially non-developers.</li>
+            <li><strong>Claude in Chrome/Excel/PowerPoint:</strong> Claude inside the tools you already use. For in-context assistance without switching apps.</li>
+            <li><strong>MCP Connectors:</strong> The integration layer. Connects all of the above to your existing services and data sources.</li>
+          </ul>
+          <div class="callout tip"><div class="callout-label">The Compound Workflow</div><p>A powerful cross-tool pattern: Research in Claude.ai → Draft in Claude.ai → Implement in Claude Code → Finalize in integrated Office apps → Store in Google Drive via MCP. Each tool does what it's best at. The key is knowing which tool to reach for.</p></div>`
+        }
+      ]
+    }
+  ],
+
+  tip: { label: "Strategic Advice", text: "Don't try to use every tool at once. Start with the one or two that address your biggest bottlenecks. For most developers, Claude Code is worth 80% of the investment. For knowledge workers, getting Projects and file creation right covers most of the value. Then layer in the ecosystem tools as each habit becomes automatic." },
+
+  practice: {
+    label: "Today's Practice (20 min)",
+    steps: [
+      "Go to claude.com/connectors and browse the connector/Skills directory. Connect at least one service you already use (Google Drive, Gmail, Asana, etc.).",
+      "Test the connection: ask Claude to find or create something in that connected service.",
+      "Map your own workflow: write down your top 3 most time-consuming recurring tasks. Identify which Claude tool is the best fit for each.",
+      "If you have access: try the Claude in Excel or PowerPoint integration on a real file."
+    ]
+  },
+
+  resources: [
+    { label: "Claude connector directory", url: "https://claude.com/connectors" },
+    { label: "Claude release notes (latest features)", url: "https://support.claude.com/en/articles/12138966-release-notes" }
+  ],
+
+  checklist: [
+    "Understand the role of each tool in the Claude ecosystem",
+    "Connect at least one external service via MCP/connectors",
+    "Test the connected service with a real task",
+    "Map your 3 biggest workflow bottlenecks to the right Claude tool"
+  ]
+},
+
+// ─── DAY 7 ───────────────────────────────────────────────────────────────────
+{
+  num: 7,
+  tag: "Mastery",
+  title: "Advanced Patterns & Staying Sharp",
+  duration: "~25 min",
+  lessons: 5,
+  intro: "You've covered the tools. Today is about the craft — the advanced thinking patterns, meta-skills, and ongoing habits that separate occasional users from people who genuinely get compounding value out of Claude over time.",
+
+  sections: [
+    {
+      label: "Advanced Prompting Patterns",
+      items: [
+        {
+          title: "The Extended Analysis Pattern",
+          body: `<p class="intro-p">For high-stakes decisions or complex analyses, a single prompt isn't enough — you want to put Claude through a structured thinking process. Here are three high-value patterns:</p>
+          <p><strong>1. The Pre-Mortem:</strong></p>
+          <div class="example"><div class="example-label neutral">Example</div><p>"Assume this plan fails badly 12 months from now. What went wrong? List the 5 most likely failure modes and for each: what the warning sign would have been and what we should do differently now."</p></div>
+          <p><strong>2. The Contrarian:</strong></p>
+          <div class="example"><div class="example-label neutral">Example</div><p>"You just helped me make the case for [X]. Now take the strongest possible opposing view. What would a smart, informed critic say? What am I missing or underweighting?"</p></div>
+          <p><strong>3. The Framework First:</strong></p>
+          <div class="example"><div class="example-label neutral">Example</div><p>"Before answering, what frameworks or mental models are most relevant to this problem? Briefly explain each one, then apply the best one to give me your answer."</p></div>`
+        },
+        {
+          title: "Role Prompting: Specific Personas Get Specific Results",
+          body: `<p class="intro-p">Assigning Claude a very specific role — especially a slightly adversarial or expert one — sharpens outputs dramatically. The more specific and professionally calibrated the role, the better.</p>
+          <p>High-value role patterns:</p>
+          <ul>
+            <li>"You are a skeptical senior security engineer. Review this code only for security issues. Be specific about line numbers and attack vectors."</li>
+            <li>"You are a direct, senior editor whose only job is to cut 30% of the words from this without losing the argument. Show what you removed and one-sentence explanations of why."</li>
+            <li>"You are a user researcher who challenges product assumptions. Push back on everything I say about what users want."</li>
+            <li>"You are a cynical investor who has seen 500 pitches. What are the 5 weakest points in this pitch deck?"</li>
+          </ul>
+          <p>The slight adversarial framing is intentional — it prevents Claude from being reflexively agreeable and produces genuinely useful friction.</p>`
+        },
+        {
+          title: "Meta-Prompting: Using Claude to Improve Your Prompts",
+          body: `<p class="intro-p">One of the most powerful and underused techniques: paste a prompt you've been using and ask Claude to critique it and rewrite it to be more effective.</p>
+          <div class="example"><div class="example-label neutral">Try this</div><p>"Here's a prompt I've been using:
+
+[paste your prompt]
+
+Please:
+1. Identify what's ambiguous or underspecified
+2. Note what information I'm assuming Claude has that I haven't provided
+3. Rewrite it to be more effective using the role + task + constraints + format structure
+4. Show me 2 different versions: one concise, one comprehensive"</p></div>
+          <p>This turns Claude into your prompting coach. It surfaces blind spots instantly — things you didn't realize you were assuming, constraints you forgot to specify, or formulations that don't clearly convey your intent.</p>
+          <div class="callout tip"><div class="callout-label">The Prompt Iteration Loop</div><p>Anthropic's prompt engineering docs suggest treating prompt development like code: write, test, evaluate, refine. The best prompt engineers don't write perfect prompts on the first try — they iterate based on output quality. For any prompt you use more than a few times, it's worth investing in this cycle.</p></div>`
+        }
+      ]
+    },
+    {
+      label: "Long-Term Habits",
+      items: [
+        {
+          title: "Building Your Prompt Library",
+          body: `<p class="intro-p">As you develop prompts that work well — for recurring tasks, specific analysis types, or writing workflows — save them. A personal prompt library is one of the highest-compounding productivity investments you can make.</p>
+          <p>How to build it:</p>
+          <ul>
+            <li>When a prompt produces a result you're proud of, save the full prompt (not just the output)</li>
+            <li>Store them in a Project's knowledge base, a Notion doc, or even a simple text file</li>
+            <li>Tag them by use case: "writing," "analysis," "code review," "research," etc.</li>
+            <li>Periodically revisit and refine them — better prompts emerge over time</li>
+          </ul>
+          <p>You can also upload your prompt library to a Project's knowledge base and ask Claude to help you find and refine prompts for new tasks.</p>`
+        },
+        {
+          title: "Staying Current as Claude Evolves",
+          body: `<p class="intro-p">Claude and its ecosystem update frequently — new model capabilities, new features, new integration options. A few habits that keep you current:</p>
+          <ul>
+            <li>Check the <a href="https://support.claude.com/en/articles/12138966-release-notes" target="_blank">Claude release notes</a> monthly — significant features ship regularly</li>
+            <li>Follow <a href="https://www.anthropic.com/news" target="_blank">Anthropic's news page</a> for model and product announcements</li>
+            <li>Revisit your Project instructions every 4–6 weeks — your needs evolve and so do Claude's capabilities</li>
+            <li>Experiment with new prompting techniques on real tasks — abstract reading doesn't build intuition, practice does</li>
+          </ul>
+          <div class="callout green"><div class="callout-label">The Compounding Effect</div><p>Users who invest in their Claude setup — good Project instructions, a prompt library, CLAUDE.md files, and regular review — report that each week they're able to do more with less effort. The investment in infrastructure pays off exponentially over months. The payoff isn't linear.</p></div>`
+        }
+      ]
+    }
+  ],
+
+  tip: { label: "The Real Unlock", text: "The biggest leap from 'occasional user' to 'power user' isn't learning tricks — it's treating Claude as a genuine thinking partner with full context. Give it your real situation, your actual constraints, your honest goals. The more real the problem, the more useful the response. Claude is not a vending machine for answers — it's a collaborator that improves with better inputs." },
+
+  practice: {
+    label: "Final Practice (25 min)",
+    steps: [
+      "Take a prompt you use regularly. Run the meta-prompting critique on it — paste it and ask Claude to rewrite it using the role + task + constraints + format structure.",
+      "Apply the pre-mortem pattern to a real plan or project you're working on. What are the 5 most likely failure modes?",
+      "Set up your 'complete' Project: the one for your most important work domain. Write detailed instructions, upload reference documents, and have a substantive conversation. This is the state to aim for with every major domain.",
+      "Write down 3 Claude habits you're committing to after this course. Put them somewhere you'll see them next week."
+    ]
+  },
+
+  resources: [
+    { label: "Anthropic prompt engineering overview", url: "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview" },
+    { label: "Anthropic news & model releases", url: "https://www.anthropic.com/news" },
+    { label: "Claude release notes", url: "https://support.claude.com/en/articles/12138966-release-notes" },
+    { label: "Claude support & documentation", url: "https://support.claude.com" }
+  ],
+
+  checklist: [
+    "Use the meta-prompting technique to critique and improve a real prompt",
+    "Apply the pre-mortem pattern to a current plan or project",
+    "Set up one complete Project with full instructions and knowledge base",
+    "Commit to 3 specific Claude habits to carry forward"
+  ]
+}
+
+]; // end days array
+
+// ── STATE ──
+let currentDay = 0;
+let checked = {};
+
+try {
+  currentDay = parseInt(localStorage.getItem('claudeCourse_day') || '0');
+  checked = JSON.parse(localStorage.getItem('claudeCourse_checked') || '{}');
+} catch(e) {}
+
+function save() {
+  try {
+    localStorage.setItem('claudeCourse_day', currentDay);
+    localStorage.setItem('claudeCourse_checked', JSON.stringify(checked));
+  } catch(e) {}
+}
+
+function getProgress() {
+  let total = 0, done = 0;
+  days.forEach((d, di) => {
+    d.checklist.forEach((_, ci) => {
+      total++;
+      if (checked[`${di}-${ci}`]) done++;
+    });
+  });
+  return total ? (done / total) * 100 : 0;
+}
+
+function renderPills() {
+  const c = document.getElementById('dayPills');
+  c.innerHTML = '';
+  days.forEach((d, i) => {
+    const p = document.createElement('button');
+    p.className = 'day-pill';
+    p.textContent = i + 1;
+    const allDone = d.checklist.every((_, ci) => checked[`${i}-${ci}`]);
+    if (allDone) p.classList.add('done');
+    else if (i === currentDay) p.classList.add('active');
+    p.addEventListener('click', () => { currentDay = i; save(); render(); window.scrollTo(0, 0); });
+    c.appendChild(p);
+  });
+}
+
+function renderDay(d, di) {
+  let sectionHtml = '';
+
+  d.sections.forEach(section => {
+    sectionHtml += `<div class="section"><div class="section-header">${section.label}</div>`;
+    section.items.forEach((item, ii) => {
+      const lessonIdx = d.sections.slice(0, d.sections.indexOf(section)).reduce((acc, s) => acc + s.items.length, 0) + ii;
+      sectionHtml += `
+        <div class="lesson" id="lesson-${di}-${lessonIdx}">
+          <div class="lesson-head" onclick="toggleLesson('lesson-${di}-${lessonIdx}')">
+            <span class="lesson-num">0${lessonIdx + 1}</span>
+            <span class="lesson-title">${item.title}</span>
+            <div class="lesson-toggle">▾</div>
+          </div>
+          <div class="lesson-body">${item.body}</div>
+        </div>`;
+    });
+    sectionHtml += `</div>`;
+  });
+
+  const resourceHtml = d.resources && d.resources.length ? `
+    <div class="section">
+      <div class="section-header">Further Reading</div>
+      <div class="callout resource">
+        <div class="callout-label">Official & Community Resources</div>
+        ${d.resources.map(r => `<p><a href="${r.url}" target="_blank">↗ ${r.label}</a></p>`).join('')}
+      </div>
+    </div>` : '';
+
+  const practiceHtml = `
+    <div class="section">
+      <div class="section-header">Hands-On Practice</div>
+      <div class="practice-box">
+        <div class="practice-label">${d.practice.label}</div>
+        ${d.practice.steps.map((s, i) => `<p><strong>${i + 1}.</strong> ${s}</p>`).join('')}
+      </div>
+    </div>`;
+
+  const tipHtml = `
+    <div class="section">
+      <div class="section-header">Key Insight</div>
+      <div class="callout tip">
+        <div class="callout-label">${d.tip.label}</div>
+        <p>${d.tip.text}</p>
+      </div>
+    </div>`;
+
+  const checklistHtml = `
+    <div class="section">
+      <div class="section-header">Day ${d.num} Checklist</div>
+      <div class="checklist-items">
+        ${d.checklist.map((item, ci) => `
+          <div class="check-item ${checked[`${di}-${ci}`] ? 'checked' : ''}" data-di="${di}" data-ci="${ci}">
+            <div class="checkbox"></div>
+            <div class="check-text">${item}</div>
+          </div>`).join('')}
+      </div>
+    </div>`;
+
+  return `
+    <div class="day-card active">
+      <div class="day-header">
+        <div class="day-numeral">0${d.num}</div>
+        <div class="day-meta">
+          <span class="day-tag">${d.tag}</span>
+          <div class="day-title">${d.title}</div>
+          <div class="day-meta-row">
+            <span>⏱ ${d.duration}</span>
+            <span>${d.lessons} lessons</span>
+            <span>${d.checklist.length} tasks</span>
+          </div>
+        </div>
+      </div>
+      <p class="day-intro">${d.intro}</p>
+      ${sectionHtml}
+      ${tipHtml}
+      ${practiceHtml}
+      ${resourceHtml}
+      ${checklistHtml}
+      <div class="day-nav">
+        <button class="nav-btn" id="prevBtn" ${di === 0 ? 'disabled' : ''}>← Previous</button>
+        <span style="font-family:'DM Mono',monospace;font-size:0.65rem;color:var(--muted)">${di + 1} / ${days.length}</span>
+        <button class="nav-btn primary" id="nextBtn" ${di === days.length - 1 ? 'disabled' : ''}>Next Day →</button>
+      </div>
+    </div>`;
+}
+
+function render() {
+  document.getElementById('main').innerHTML = renderDay(days[currentDay], currentDay);
+  document.getElementById('progressFill').style.width = getProgress() + '%';
+  renderPills();
+
+  // Expand first lesson
+  const firstLesson = document.querySelector('.lesson');
+  if (firstLesson) firstLesson.classList.add('open');
+
+  // Checklist
+  document.querySelectorAll('.check-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const di = el.dataset.di, ci = el.dataset.ci;
+      const key = `${di}-${ci}`;
+      checked[key] = !checked[key];
+      el.classList.toggle('checked');
+      save();
+      document.getElementById('progressFill').style.width = getProgress() + '%';
+      renderPills();
+    });
+  });
+
+  // Nav
+  document.getElementById('prevBtn')?.addEventListener('click', () => { currentDay--; save(); render(); window.scrollTo(0, 0); });
+  document.getElementById('nextBtn')?.addEventListener('click', () => { currentDay++; save(); render(); window.scrollTo(0, 0); });
+}
+
+function toggleLesson(id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.toggle('open');
+}
+
+render();
+</script>
+</body>
+</html>
